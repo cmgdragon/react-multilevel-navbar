@@ -13,17 +13,32 @@ export const navBar = {
 
 
 export const navBar__list = {
+    padding: '0',
+    marginRight: '1rem',
+    display: 'inline-block',
+    verticalAlign: 'top',
+    transition: 'all .5s ease-in',
     ...removeListDecorators
 }
 
 export const navBar__listItem_firstLevel = {
-    display: 'inline'
+    display: 'inline-table',
+    padding: '.5rem'
 }
 
 export const navBar__listItem = {
-    display: 'inline'
+    paddingTop: '.5rem'
 }
 
 export const navBar__link = {
+    padding: '0px',
     ...removeLinkDecorators
+}
+
+export const navBar__groupList = {
+    padding: '16px',
+    whiteSpace: 'nowrap',
+    border: '1px solid black',
+    overflow: 'hidden',
+    transition: 'width 1s'
 }
