@@ -18,6 +18,7 @@ export const navBar__list = {
     display: 'inline-block',
     verticalAlign: 'top',
     transition: 'all .5s ease-in',
+    boxSizing: 'border-box',
     ...removeListDecorators
 }
 
@@ -27,7 +28,8 @@ export const navBar__listItem_firstLevel = {
 }
 
 export const navBar__listItem = {
-    paddingTop: '.5rem'
+    paddingTop: '.5rem',
+    boxSizing: 'border-box'
 }
 
 export const navBar__link = {
@@ -40,5 +42,5 @@ export const navBar__groupList = {
     whiteSpace: 'nowrap',
     border: '1px solid black',
     overflow: 'hidden',
-    transition: 'width 1s'
+    transition: 'width .5s'
 }
