@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
+import NavbarList from './navbar-list';
 import * as styles from './styles';
-import model from '../navbar-model';
 import './test.module.css';
 
-const NavbarGroup = ({group}) => {
+const NavbarGroup = ({ levelGroup }) => {
 
-    const extractSubLevels = level => {
+    const extractSubLevels = levelGroup => {
         const navbarLevels = [];
 
         let i = 0;
@@ -20,63 +20,66 @@ const NavbarGroup = ({group}) => {
             }
         }
 
-        extractLevels(level);
+        extractLevels(levelGroup);
 
         return navbarLevels;
 
     }
 
     return (
-        <>
-        {
-            Object.entries(group).map((group, index) => {
-                return (
-                    <>
-                    
-                    </>
-                )
-            })
-        }
         <div style={styles.navBar__groupList} data-navbar-group>
-        <ul style={styles.navBar__list}>
-            <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, false)}>
-                <a style={styles.navBar__link} href="#">Test2</a>
-            </li>
-        </ul>
+            {
+                extractSubLevels(levelGroup).map((groupList, index) => {
+                    console.log(extractSubLevels(levelGroup))
+                    return (
+                        <NavbarList key={index} levelList={groupList} />
+                    )
+                })
+            }
+            {/*
+            <div style={styles.navBar__groupList} data-navbar-group>
+                <ul style={styles.navBar__list}>
+                    <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, false)}>
+                        <a style={styles.navBar__link} href="#">Test2</a>
+                    </li>
+                </ul>
 
-        <ul style={styles.navBar__list}>
-            <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, true)}>
-                <a
-                    style={styles.navBar__link}
-                    aria-label="hidedn"
-                    href="#"
-                    data-navbar="previouslevel">
-                    Back
+                <ul style={styles.navBar__list}>
+                    <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, true)}>
+                        <a
+                            style={styles.navBar__link}
+                            aria-label="hidedn"
+                            href="#"
+                            data-navbar="previouslevel">
+                            Back
                 </a>
-            </li>
-            <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, false)}>
-                <a style={styles.navBar__link} href="#">Test2fdsfsfsfsdfs</a>
-            </li>
-        </ul>
+                    </li>
+                    <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, false)}>
+                        <a style={styles.navBar__link} href="#">Test2fdsfsfsfsdfs</a>
+                    </li>
+                </ul>
 
 
-        <ul style={styles.navBar__list}>
-            <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, true)}>
-                <a
-                    style={styles.navBar__link}
-                    aria-label="hidedn"
-                    href="#"
-                    data-navbar="previouslevel">
-                    Back
+                <ul style={styles.navBar__list}>
+                    <li style={styles.navBar__listItem} onClick={(event) => changeGroup(event, true)}>
+                        <a
+                            style={styles.navBar__link}
+                            aria-label="hidedn"
+                            href="#"
+                            data-navbar="previouslevel">
+                            Back
                 </a>
-            </li>
-            <li style={styles.navBar__listItem}><a style={styles.navBar__link} href="#">esto va o qué JODER</a></li>
-            <li style={styles.navBar__listItem}><a style={styles.navBar__link} href="#">PUES AHORA VEREMOS</a></li>
-            <li style={styles.navBar__listItem}><a style={styles.navBar__link} href="#">si va o no</a></li>
-        </ul>
+                    </li>
+                    <li style={styles.navBar__listItem}><a style={styles.navBar__link} href="#">esto va o qué JODER</a></li>
+                    <li style={styles.navBar__listItem}><a style={styles.navBar__link} href="#">PUES AHORA VEREMOS</a></li>
+                    <li style={styles.navBar__listItem}><a style={styles.navBar__link} href="#">si va o no</a></li>
+                </ul>
 
 
-    </div>
-    </>
+            </div>
+            */}
+        </div>
     )
 }
+
+export default NavbarGroup;

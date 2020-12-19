@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
+import NavbarGroup from './navbar-group';
 import * as styles from './styles';
+import model from '../navbar-model';
 import './test.module.css';
 
 const ReactMultilevelNavbar = () => {
@@ -24,52 +26,30 @@ const ReactMultilevelNavbar = () => {
 
     }, []);
 
-    const changeGroup = ({ currentTarget }, isPrevious) => {
-
-        const groupElement = isPrevious ? currentTarget.parentElement.previousElementSibling :
-            currentTarget.parentElement.nextElementSibling;
-
-        groupElement.parentElement.style.display = 'block';
-
-        const itemCurrentSizes = [...currentTarget.parentElement.childNodes].map(item => item.offsetWidth);
-        const itemCount = groupElement.childNodes.length;
-        const itemSizes = [...groupElement.childNodes].map(item => item.offsetWidth);
-
-        const largestCurrentItem = itemCurrentSizes.reduce((prev, curr) => prev < curr ? curr : prev);
-        const largestItem = itemSizes.reduce((prev, curr) => prev < curr ? curr : prev);
-
-        groupElement.parentElement.style.width = `${largestItem}px`;
-        groupElement.parentElement.style.height = `${(16 * itemCount) + (8 * itemCount) + 8}px`;
-
-       let newScrollLeft;
-       if (isPrevious) {
-            newScrollLeft = largestItem + 16;
-       } else {
-            newScrollLeft = largestCurrentItem + (16 * 2) - 16;
-       }
-        
-        let scrollAmount = 0;
-        const scroll = setInterval(function () {
-
-            if (isPrevious) {
-                groupElement.parentElement.scrollLeft -= 1;
-            } else {
-                groupElement.parentElement.scrollLeft += 1;
-            }
-
-            scrollAmount += 1;
-            if (scrollAmount >= newScrollLeft) {
-                groupElement.parentElement.style.display = 'none';
-                clearInterval(scroll);
-            }
-
-        }, 5);
-
-    }
-
     return (
         <nav style={styles.navBar} id="multilevel-navbar">
             <ul style={styles.navBar__list}>
+
+                {
+                    Object.entries(model).map((level, index) => {
+                        return (
+                            <React.Fragment key={index}>
+                                {
+                                    typeof level[1] === 'object' ?
+                                        <li style={styles.navBar__listItem_firstLevel}>
+                                            {level[0]}
+                                            <NavbarGroup levelGroup={level} />
+                                        </li>
+                                        :
+                                        <li style={styles.navBar__listItem_firstLevel}>
+                                            <a style={styles.navBar__link} href={level[1]}>{level[0]}</a>
+                                        </li>
+                                }
+                            </React.Fragment>
+                        )
+                    })
+                }
+                {/*
                 <li style={styles.navBar__listItem_firstLevel}>
                     Level 1
 
@@ -125,6 +105,7 @@ const ReactMultilevelNavbar = () => {
 
 
                 </li>
+ */}
             </ul>
         </nav>
     )
