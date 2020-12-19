@@ -14,7 +14,7 @@ export const navBar = {
 
 export const navBar__list = {
     padding: '0',
-    marginRight: '1rem',
+    marginRight: '16px',
     display: 'inline-block',
     verticalAlign: 'top',
     transition: 'all .5s ease-in',
@@ -42,5 +42,8 @@ export const navBar__groupList = {
     whiteSpace: 'nowrap',
     border: '1px solid black',
     overflow: 'hidden',
-    transition: 'width .5s'
+    opacity: '1',
+    transition: 'all .5s',
+    position: 'absolute',
+    visibility: 'hidden'
 }
