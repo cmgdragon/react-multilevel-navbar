@@ -12,19 +12,18 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
                 .filter(n => n.getAttribute('data-navbar-belongsto') !== 'root')
                 .forEach(n => n.style.display = 'none');
 
-            [...parentTarget.parentElement.querySelectorAll(`[data-navbar-belongsto=${
-                currentTarget.getAttribute('data-navbar-partof')
-            }]`)].forEach(n => n.style.display = '');
+            [...parentTarget.parentElement.querySelectorAll(`[data-navbar-belongsto=${currentTarget.getAttribute('data-navbar-partof')
+                }]`)].forEach(n => n.style.display = '');
 
         }
 
-        const filteredGroups = [...parentTarget.parentElement.childNodes].filter(n=>n.style.display != 'none');
-        const currentGroupIndex = filteredGroups.findIndex(n=>n === parentTarget);
+        const filteredGroups = [...parentTarget.parentElement.childNodes].filter(n => n.style.display != 'none');
+        const currentGroupIndex = filteredGroups.findIndex(n => n === parentTarget);
 
-        const groupElement = isPrevious ? 
-        filteredGroups[currentGroupIndex-1]
+        const groupElement = isPrevious ?
+            filteredGroups[currentGroupIndex - 1]
             :
-        filteredGroups[currentGroupIndex+1];
+            filteredGroups[currentGroupIndex + 1];
 
         groupElement.parentElement.style.display = 'block';
 
@@ -51,17 +50,15 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
             newScrollLeft = currentLevelWidth + (16 * 2) - 16;
         }
 
-        let scrollAmount = 0;
         const scroll = setInterval(function () {
 
             if (isPrevious) {
-                groupElement.parentElement.scrollLeft -= 1;
+                groupElement.parentElement.scrollLeft -= window.devicePixelRatio;
             } else {
-                groupElement.parentElement.scrollLeft += 1;
+                groupElement.parentElement.scrollLeft += window.devicePixelRatio;
             }
 
-            scrollAmount += 1;
-            if (scrollAmount >= newScrollLeft) {
+            if (groupElement.parentElement.scrollLeft >= newScrollLeft) {
                 groupElement.parentElement.style.display = 'none';
                 clearInterval(scroll);
             }
@@ -71,27 +68,27 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
     }
 
     return (
-        <ul className={styles.navBar__list} 
-        data-navbar-belongsto={isFirstSubLevel ? 'root': belongsTo} 
-        style={isFirstSubLevel ? {display: ''} : {display: 'none'}}>
+        <ul className={styles.navBar__list}
+            data-navbar-belongsto={isFirstSubLevel ? 'root' : belongsTo}
+            style={isFirstSubLevel ? { display: '' } : { display: 'none' }}>
             {
                 levelList.map(([levelName, value, isLevelNumber], index) => {
                     return (
                         <React.Fragment key={index}>
-                            { !isFirstSubLevel && index === 0 ? 
+                            { !isFirstSubLevel && index === 0 ?
                                 <li key={index}
-                                 className={styles.navBar__listItem}
-                                 onClick={(event) => changeGroup(event, true)}
-                                 tabIndex="1">
+                                    className={styles.navBar__listItem}
+                                    onClick={(event) => changeGroup(event, true)}
+                                    tabIndex="1">
                                     Back
                                 </li> : ''
                             }
                             {
                                 value === 'next' ?
 
-                                    <li className={styles.navBar__listItem} 
-                                    onClick={(event) => changeGroup(event, false)}
-                                    data-navbar-partof={isLevelNumber}>
+                                    <li className={styles.navBar__listItem}
+                                        onClick={(event) => changeGroup(event, false)}
+                                        data-navbar-partof={isLevelNumber}>
                                         {levelName}
                                     </li>
                                     :
