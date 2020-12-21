@@ -3,11 +3,10 @@ import styles from '../Styles/styles.module.css';
 
 const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
 
-    const changeGroup = ({ currentTarget }, isPrevious) => {
-
-        const parentTarget = currentTarget.parentElement;
+    const selectNextOrPreviousGroup = (isPrevious, parentTarget, currentTarget) => {
 
         if (!isPrevious) {
+            
             [...parentTarget.parentElement.querySelectorAll(`[data-navbar-belongsto]`)]
                 .filter(n => n.getAttribute('data-navbar-belongsto') !== 'root')
                 .forEach(n => n.style.display = 'none');
@@ -20,18 +19,24 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
         const filteredGroups = [...parentTarget.parentElement.childNodes].filter(n => n.style.display != 'none');
         const currentGroupIndex = filteredGroups.findIndex(n => n === parentTarget);
 
-        const groupElement = isPrevious ?
+        return isPrevious ?
             filteredGroups[currentGroupIndex - 1]
             :
             filteredGroups[currentGroupIndex + 1];
+    }
 
-        groupElement.parentElement.style.display = 'block';
+    const enableDisableButtons = (disable, listElement) => {
+        const groupElements = listElement.parentElement.childNodes;
+        groupElements.forEach(list => list.setAttribute('data-navbar-disabled', disable));
+    }
+
+    const assignGroupSizes = (currentTarget, listElement, isPrevious) => {
 
         const currentItems = [...currentTarget.parentElement.childNodes]
             .filter(node => node.localName === 'li')
         const itemCurrentSizes = currentItems.map(item => item.offsetWidth);
 
-        const items = [...groupElement.childNodes].filter(node => node.nodeName !== '#text');
+        const items = [...listElement.childNodes].filter(node => node.nodeName !== '#text');
         const itemSizes = items.map(item => item.offsetWidth);
 
         const largestCurrentItem = itemCurrentSizes.reduce((prev, curr) => prev < curr ? curr : prev);
@@ -40,30 +45,55 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
         const levelWidth = largestItem >= 200 ? 200 : largestItem;
         const currentLevelWidth = largestCurrentItem >= 200 ? 200 : largestCurrentItem;
 
-        groupElement.parentElement.style.width = `${levelWidth}px`;
-        groupElement.parentElement.style.height = `${groupElement.offsetHeight}px`;
+        listElement.parentElement.style.width = `${levelWidth}px`;
+        listElement.parentElement.style.height = `${listElement.offsetHeight}px`;
 
-        let newScrollLeft;
+        moveGroupScroll(listElement, isPrevious, currentLevelWidth);
+
+    }
+
+    const moveGroupScroll = (listElement, isPrevious, currentLevelWidth) => {
+        let newScrollLeft = listElement.parentElement.scrollLeft;
+
         if (isPrevious) {
-            newScrollLeft = levelWidth + 16;
+            newScrollLeft -= currentLevelWidth + (16 * 2) - 16;
         } else {
-            newScrollLeft = currentLevelWidth + (16 * 2) - 16;
+            newScrollLeft += currentLevelWidth + (16 * 2) - 16;
         }
 
         const scroll = setInterval(function () {
 
             if (isPrevious) {
-                groupElement.parentElement.scrollLeft -= window.devicePixelRatio;
+                listElement.parentElement.scrollLeft -= window.devicePixelRatio;
+                if (listElement.parentElement.scrollLeft <= newScrollLeft) {
+                    listElement.parentElement.style.display = 'none';
+                    clearInterval(scroll);
+                    enableDisableButtons(false, listElement);
+                }
             } else {
-                groupElement.parentElement.scrollLeft += window.devicePixelRatio;
+                listElement.parentElement.scrollLeft += window.devicePixelRatio;
+                if (listElement.parentElement.scrollLeft >= newScrollLeft) {
+                    listElement.parentElement.style.display = 'none';
+                    clearInterval(scroll);
+                    enableDisableButtons(false, listElement);
+                }
             }
 
-            if (groupElement.parentElement.scrollLeft >= newScrollLeft) {
-                groupElement.parentElement.style.display = 'none';
-                clearInterval(scroll);
-            }
+        }, 1);
+    }
 
-        }, 5);
+    const changeGroup = ({ currentTarget }, isPrevious) => {
+
+        const parentTarget = currentTarget.parentElement;
+
+        if (parentTarget.getAttribute('data-navbar-disabled') == 'true') return;
+
+        const listElement = selectNextOrPreviousGroup(isPrevious, parentTarget, currentTarget);
+        
+        enableDisableButtons(true, listElement);
+        listElement.parentElement.style.display = 'block';
+
+        assignGroupSizes(currentTarget, listElement, isPrevious);
 
     }
 
@@ -78,9 +108,10 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
                             { !isFirstSubLevel && index === 0 ?
                                 <li key={index}
                                     className={styles.navBar__listItem}
+                                    data-navbar-back
                                     onClick={(event) => changeGroup(event, true)}
                                     tabIndex="1">
-                                    Back
+                                    
                                 </li> : ''
                             }
                             {
