@@ -1,16 +1,19 @@
 {
   "name": "react-multilevel-navbar",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A multilevel navbar for your react project.",
+  "main": "index.html",
   "scripts": {
-    "dev": "parcel index.html --no-cache"
+    "webpack:dev": "webpack serve",
+    "webpack:build": "webpack --mode production",
+    "clean": "rimraf build",
+    "dev": "npm-run-all clean webpack:dev",
+    "build": "npm-run-all clean webpack:build"
   },
   "author": "cmgdragon",
   "license": "ISC",
   "dependencies": {
-    "autoprefixer": "^10.1.0",
-    "postcss-modules": "^4.0.0",
+    "@babel/runtime": "^7.12.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
@@ -18,6 +21,23 @@
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.12.7",
     "@babel/preset-react": "^7.12.7",
-    "parcel": "^2.0.0-beta.1"
-  }
+    "autoprefixer": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "browserslist": "^4.16.0",
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.2.1",
+    "postcss-loader": "^4.1.0",
+    "postcss-modules": "^4.0.0",
+    "rimraf": "^3.0.2",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "browserslist": [
+    "last 1 version",
+    ">1%"
+  ]
 }
