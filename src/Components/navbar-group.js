@@ -5,21 +5,32 @@ import styles from '../Styles/styles.module.css';
 const NavbarGroup = ({ levelGroup }) => {
 
     const extractSubLevels = levelGroup => {
-        const navbarLevels = [];
 
+        const navbarLevels = [];
         let i = 0;
-        const extractLevels = levelGroup => {
-            navbarLevels[++i] = [];
-            for (const [levelName, value] of Object.entries(levelGroup)) {
+
+        const extractLevels = (levelGroup, belongsTo) => {
+
+            navbarLevels[++i] = [[], ''];
+            let saved = [];
+            const subLevels = Object.entries(levelGroup);
+
+            navbarLevels[i][1] = `level${belongsTo}`;
+            for (const [levelName, value] of subLevels) {
+
                 if (typeof value === 'object') {
-                    navbarLevels[i].push([levelName, 'next']);
-                    extractLevels(value);
+                    saved.push([value, belongsTo]);
+                    navbarLevels[i][0].push([levelName, 'next', `level${belongsTo}`]);
+                    
+                } else {
+                    navbarLevels[i][0].push([levelName, value, i===1?`level${belongsTo}`:'']);
                 }
-                else navbarLevels[i].push([levelName, value]);
+                if (i === 1) belongsTo++;
             }
+            saved.forEach(([levelName, belongsTo]) => extractLevels(levelName, belongsTo));
         }
 
-        extractLevels(levelGroup);
+        extractLevels(levelGroup, 1);
 
         return navbarLevels;
 
@@ -28,9 +39,9 @@ const NavbarGroup = ({ levelGroup }) => {
     return (
         <div className={styles.navBar__groupList} data-navbar-group>
             {
-                extractSubLevels(levelGroup).map((groupList, index) => {
+                extractSubLevels(levelGroup).map(([groupList, belongsTo], index) => {
                     return (
-                        <NavbarList key={index} levelList={groupList} isFirstSubLevel={index === 1 ? true : false} />
+                        <NavbarList key={index} levelList={groupList} belongsTo={belongsTo} isFirstSubLevel={index === 1 ? true : false} />
                     )
                 })
             }

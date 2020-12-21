@@ -6,30 +6,28 @@ import styles from '../Styles/styles.module.css';
 const ReactMultilevelNavbar = () => {
 
     useEffect(() => {
+  
         const allGroups = document.querySelectorAll('[data-navbar-group]');
 
         allGroups.forEach(group => {
-            console.dir(group.firstElementChild.childNodes)
-            const allItemSizesFirstLevel = [...group.firstElementChild.childNodes]
+
+            const allItemsWidthFirstLevel = [...group.firstElementChild.childNodes]
                 .filter(node => node.localName === 'li')
-                .map(item => {
-                    if (item.offsetWidth >= 200) {
-                        console.log('yes')
-                        item.style.whiteSpace = 'break-spaces';
-                    }
-                    return item.offsetWidth;
-                });
+                .map(item => item.offsetWidth);
 
-console.log("init",allItemSizesFirstLevel)
+            const allItemsWHeightFirstLevel = [...group.firstElementChild.childNodes]
+            .filter(node => node.localName === 'li')
+            .map(item => item.offsetHeight)
+            .reduce((prev, curr) => curr + prev);
 
-            const largestItemFirstLevel = allItemSizesFirstLevel
+            const largestItemFirstLevel = allItemsWidthFirstLevel
                 .reduce((prev, curr) => prev < curr ? curr : prev);
 
             const fistLevelWidth = largestItemFirstLevel >= 200 ? 200 : largestItemFirstLevel;
 
             group.style.width = `${fistLevelWidth}px`;
-            const itemCount = allItemSizesFirstLevel.length;
-           // group.style.height = `${(16 * itemCount) + (8 * itemCount) + 8*2}px`;
+            const itemCount = allItemsWidthFirstLevel.length;
+            //group.style.height = `${group.firstElementChild.offsetHeight}px`;
             group.style.visibility = 'visible';
             group.style.display = 'none';
 

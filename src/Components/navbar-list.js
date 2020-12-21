@@ -1,12 +1,30 @@
 import React from 'react';
 import styles from '../Styles/styles.module.css';
 
-const NavbarList = ({ levelList, isFirstSubLevel }) => {
+const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
 
     const changeGroup = ({ currentTarget }, isPrevious) => {
 
-        const groupElement = isPrevious ? currentTarget.parentElement.previousElementSibling :
-            currentTarget.parentElement.nextElementSibling;
+        const parentTarget = currentTarget.parentElement;
+
+        if (!isPrevious) {
+            [...parentTarget.parentElement.querySelectorAll(`[data-navbar-belongsto]`)]
+                .filter(n => n.getAttribute('data-navbar-belongsto') !== 'root')
+                .forEach(n => n.style.display = 'none');
+
+            [...parentTarget.parentElement.querySelectorAll(`[data-navbar-belongsto=${
+                currentTarget.getAttribute('data-navbar-partof')
+            }]`)].forEach(n => n.style.display = '');
+
+        }
+
+        const filteredGroups = [...parentTarget.parentElement.childNodes].filter(n=>n.style.display != 'none');
+        const currentGroupIndex = filteredGroups.findIndex(n=>n === parentTarget);
+
+        const groupElement = isPrevious ? 
+        filteredGroups[currentGroupIndex-1]
+            :
+        filteredGroups[currentGroupIndex+1];
 
         groupElement.parentElement.style.display = 'block';
 
@@ -14,19 +32,17 @@ const NavbarList = ({ levelList, isFirstSubLevel }) => {
             .filter(node => node.localName === 'li')
         const itemCurrentSizes = currentItems.map(item => item.offsetWidth);
 
-        const items = [...groupElement.childNodes].filter(node => node.localName === 'li');
-        const itemCount = items.length;
+        const items = [...groupElement.childNodes].filter(node => node.nodeName !== '#text');
         const itemSizes = items.map(item => item.offsetWidth);
 
         const largestCurrentItem = itemCurrentSizes.reduce((prev, curr) => prev < curr ? curr : prev);
         const largestItem = itemSizes.reduce((prev, curr) => prev < curr ? curr : prev);
-        console.log("ea",itemSizes)
 
         const levelWidth = largestItem >= 200 ? 200 : largestItem;
         const currentLevelWidth = largestCurrentItem >= 200 ? 200 : largestCurrentItem;
 
         groupElement.parentElement.style.width = `${levelWidth}px`;
-        //groupElement.parentElement.style.height = `${(16 * itemCount) + (8 * itemCount) + 8*2}px`;
+        groupElement.parentElement.style.height = `${groupElement.offsetHeight}px`;
 
         let newScrollLeft;
         if (isPrevious) {
@@ -55,9 +71,11 @@ const NavbarList = ({ levelList, isFirstSubLevel }) => {
     }
 
     return (
-        <ul className={styles.navBar__list}>
+        <ul className={styles.navBar__list} 
+        data-navbar-belongsto={isFirstSubLevel ? 'root': belongsTo} 
+        style={isFirstSubLevel ? {display: ''} : {display: 'none'}}>
             {
-                levelList.map((item, index) => {
+                levelList.map(([levelName, value, isLevelNumber], index) => {
                     return (
                         <React.Fragment key={index}>
                             { !isFirstSubLevel && index === 0 ? 
@@ -67,17 +85,18 @@ const NavbarList = ({ levelList, isFirstSubLevel }) => {
                                  tabIndex="1">
                                     Back
                                 </li> : ''
-
                             }
                             {
-                                item[1] === 'next' ?
+                                value === 'next' ?
 
-                                    <li className={styles.navBar__listItem} onClick={(event) => changeGroup(event, false)} tabIndex="1">
-                                        {item[0]}
+                                    <li className={styles.navBar__listItem} 
+                                    onClick={(event) => changeGroup(event, false)}
+                                    data-navbar-partof={isLevelNumber}>
+                                        {levelName}
                                     </li>
                                     :
                                     <li className={styles.navBar__listItem}>
-                                        <a className={styles.navBar__link} href={item[1]}>{item[0]}</a>
+                                        <a className={styles.navBar__link} href={value}>{levelName}</a>
                                     </li>
                             }
                         </React.Fragment>

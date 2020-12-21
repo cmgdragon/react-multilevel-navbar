@@ -6,13 +6,18 @@ const model = {
     },
 
     ['Level 2'] : {
-        ['QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: {
-            ['QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: '#'
+        ['1QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: {
+            ['1.1QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: '#'
+        },
+        ['2QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPATSDAD'] : {
+            ['2.2 GHYUGUYHUJI'] : '#'
         }
     },
 
     ['Level 3'] : {
-        ['Sublevel 3-1'] : '#',
+        ['Sublevel 3-1'] : {
+            ['Sublevel 3-1-1'] : '#'
+        },
         ['Sublevel 3-2'] : '#',
         ['Sublevel 3-3'] : {
             ['Sublevel 3-3-1'] : '#',
