@@ -1,7 +1,9 @@
 import React from 'react';
-import styles from '../Styles/styles.module.css';
+import SubLevelList, { getCustomSubLevelListCSS } from '../styled-components/SubLevelList';
+import SubLevelItem, { getCustomSubLevelItemCSS } from '../styled-components/SubLevelItem';
+import LevelLink from '../styled-components/LevelLink';
 
-const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
+const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) => {
 
     const selectNextOrPreviousGroup = (isPrevious, parentTarget, currentTarget) => {
 
@@ -98,7 +100,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
     }
 
     return (
-        <ul className={styles.navBar__list}
+        <SubLevelList css={getCustomSubLevelListCSS(custom_colors)}
             data-navbar-belongsto={isFirstSubLevel ? 'root' : belongsTo}
             style={isFirstSubLevel ? { display: '' } : { display: 'none' }}>
             {
@@ -106,33 +108,33 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo }) => {
                     return (
                         <React.Fragment key={index}>
                             { !isFirstSubLevel && index === 0 ?
-                                <li key={index}
-                                    className={styles.navBar__listItem}
+                                <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
+                                    key={index}
                                     data-navbar-back
                                     onClick={(event) => changeGroup(event, true)}
                                     tabIndex="1">
                                     
-                                </li> : ''
+                                </SubLevelItem> : ''
                             }
                             {
                                 value === 'next' ?
 
-                                    <li className={styles.navBar__listItem}
+                                    <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
                                         onClick={(event) => changeGroup(event, false)}
                                         data-navbar-partof={isLevelNumber}>
                                         {levelName}
-                                    </li>
+                                    </SubLevelItem>
                                     :
-                                    <li className={styles.navBar__listItem}>
-                                        <a className={styles.navBar__link} href={value}>{levelName}</a>
-                                    </li>
+                                    <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}>
+                                        <LevelLink href={value}>{levelName}</LevelLink>
+                                    </SubLevelItem>
                             }
                         </React.Fragment>
                     )
                 })
             }
 
-        </ul>
+        </SubLevelList>
     )
 }
 

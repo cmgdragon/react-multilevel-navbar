@@ -1,15 +1,15 @@
 import React from 'react';
-import NavbarList from './navbar-list';
-import styles from '../Styles/styles.module.css';
+import NavbarList from './Navbar-list';
+import GroupList, { getCustomGroupListCSS } from '../styled-components/GroupList';
 
-const NavbarGroup = ({ levelGroup }) => {
+const NavbarGroup = ({ levelGroup, custom_colors, custom_padding, mobile_breakpoint }) => {
 
     const extractSubLevels = levelGroup => {
 
         const navbarLevels = [];
         let i = 0;
 
-        const extractLevels = (levelGroup, belongsTo) => {
+        const extract = (levelGroup, belongsTo) => {
 
             navbarLevels[++i] = [[], ''];
             let saved = [];
@@ -27,25 +27,31 @@ const NavbarGroup = ({ levelGroup }) => {
                 }
                 if (i === 1) belongsTo++;
             }
-            saved.forEach(([levelName, belongsTo]) => extractLevels(levelName, belongsTo));
+            saved.forEach(([levelName, belongsTo]) => extract(levelName, belongsTo));
         }
 
-        extractLevels(levelGroup, 1);
+        extract(levelGroup, 1);
 
         return navbarLevels;
 
     }
 
     return (
-        <div className={styles.navBar__groupList} data-navbar-group>
+        <GroupList css={getCustomGroupListCSS(custom_colors, custom_padding, mobile_breakpoint)} data-navbar-group>
             {
                 extractSubLevels(levelGroup).map(([groupList, belongsTo], index) => {
                     return (
-                        <NavbarList key={index} levelList={groupList} belongsTo={belongsTo} isFirstSubLevel={index === 1 ? true : false} />
+                        <NavbarList 
+                            key={index} 
+                            levelList={groupList} 
+                            belongsTo={belongsTo} 
+                            isFirstSubLevel={index === 1 ? true : false} 
+                            custom_colors={custom_colors}
+                        />
                     )
                 })
             }
-        </div>
+        </GroupList>
     )
 }
 
