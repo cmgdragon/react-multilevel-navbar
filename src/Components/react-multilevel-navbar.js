@@ -15,11 +15,6 @@ const ReactMultilevelNavbar = () => {
                 .filter(node => node.localName === 'li')
                 .map(item => item.offsetWidth);
 
-            const allItemsWHeightFirstLevel = [...group.firstElementChild.childNodes]
-            .filter(node => node.localName === 'li')
-            .map(item => item.offsetHeight)
-            .reduce((prev, curr) => curr + prev);
-
             const largestItemFirstLevel = allItemsWidthFirstLevel
                 .reduce((prev, curr) => prev < curr ? curr : prev);
 
@@ -27,7 +22,7 @@ const ReactMultilevelNavbar = () => {
 
             group.style.width = `${fistLevelWidth}px`;
             const itemCount = allItemsWidthFirstLevel.length;
-            //group.style.height = `${group.firstElementChild.offsetHeight}px`;
+
             group.style.visibility = 'visible';
             group.style.display = 'none';
 
@@ -44,8 +39,10 @@ const ReactMultilevelNavbar = () => {
                             <React.Fragment key={index}>
                                 {
                                     typeof level[1] === 'object' ?
-                                        <li className={styles.navBar__listItem_firstLevel} tabIndex="1">
-                                            {level[0]}
+                                        <li className={styles.navBar__listItem_firstLevel}
+                                         tabIndex="1"
+                                         data-navbar-hasgroup>
+                                            <span>{level[0]}</span>
                                             <NavbarGroup levelGroup={level[1]} />
                                         </li>
                                         :
