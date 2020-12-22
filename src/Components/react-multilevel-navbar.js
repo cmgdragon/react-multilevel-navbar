@@ -3,7 +3,7 @@ import NavbarGroup from './Navbar-group';
 import NavBar, { getCustomNavbarCSS } from '../styled-components/Navbar';
 import FirstLevelList, { getCustomFirstLevelListCSS } from '../styled-components/FirstLevelList';
 import FirstLevelItem, { getCustomFirstLevelItemCSS } from '../styled-components/FirstLevelItem';
-import LevelLink from '../styled-components/LevelLink';
+import ItemLink from '../styled-components/ItemLink';
 
 const ReactMultilevelNavbar = ({model, custom_width, custom_padding, 
     custom_colors, custom_fontFamily, mobile_breakpoint}) => {
@@ -42,7 +42,7 @@ const ReactMultilevelNavbar = ({model, custom_width, custom_padding,
                                     typeof level[1] === 'object' ?
                                         <FirstLevelItem
                                          css={getCustomFirstLevelItemCSS(custom_padding, custom_colors)}
-                                         tabIndex="1"
+                                         tabIndex={1}
                                          data-navbar-hasgroup>
                                             <span>{level[0]}</span>
                                             <NavbarGroup 
@@ -55,8 +55,10 @@ const ReactMultilevelNavbar = ({model, custom_width, custom_padding,
                                         :
                                         <FirstLevelItem 
                                          css={getCustomFirstLevelItemCSS(custom_padding, custom_colors)}
-                                         tabIndex="1">
-                                            <LevelLink tabIndex="-1" href={level[1]}>{level[0]}</LevelLink>
+                                         tabIndex={1}
+                                         onClick={followLink}
+                                         onKeyDown={(event) => {if (event.code === 'Enter') return followLink(event)}}>
+                                            <ItemLink tabIndex="-1" href={level[1]}>{level[0]}</ItemLink>
                                         </FirstLevelItem>
                                 }
                             </React.Fragment>
@@ -83,3 +85,4 @@ ReactMultilevelNavbar.defaultProps = {
 }
 
 export default ReactMultilevelNavbar;
+export const followLink = ({currentTarget}) => currentTarget.firstChild.click();

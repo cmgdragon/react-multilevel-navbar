@@ -20,20 +20,21 @@ const FirstLevelItem = styled.li`
     flex: 1;
     position: relative;
     text-align: center;
+    text-decoration: unset;
+    color: inherit;
 
     &:hover {
         cursor: pointer;
     }
 
-    &:hover > [data-navbar-group] {
+    &:hover > [data-navbar-group], &:focus-within > [data-navbar-group] {
         display: block !important;
         animation-name: ${expand};
         animation-duration: .5s;
     }
 
     a {
-        text-decoration: unset;
-        color: inherit;
+        text-align: center;
         padding: 0;
     }
 
@@ -49,7 +50,7 @@ const FirstLevelItem = styled.li`
         top: 40%;
     }
     
-    &:hover > span::after {
+    &:hover > span::after, &:focus-within > span::after {
         transform: rotateZ(135deg);
     }
 
@@ -65,7 +66,7 @@ export const getCustomFirstLevelItemCSS = (custom_padding, custom_colors) => css
 
     padding: ${custom_padding};
 
-    &:hover {
+    &:hover, &:focus-within {
         background-color: ${custom_colors.expand_color};
     }
 

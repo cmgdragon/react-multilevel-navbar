@@ -12,8 +12,6 @@ const FirstLevelList = styled.ul`
     box-sizing: border-box;
     justify-content: space-around;
     margin: 0;
-    
-
 
 `;
 
@@ -26,6 +24,7 @@ export const getCustomFirstLevelListCSS = (custom_width, custom_colors, mobile_b
     box-shadow: inset 0px 9px 0px 0px ${custom_colors.expand_color};
 
     @media (max-width: ${mobile_breakpoint}) {
+        box-shadow: inset 15px 0px 0px 0px ${custom_colors.expand_color};
         flex-direction: column;
         width: 100% !important;
     }

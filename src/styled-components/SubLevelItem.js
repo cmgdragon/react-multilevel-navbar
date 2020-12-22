@@ -17,7 +17,7 @@ export default SubLevelItem;
 
 export const getCustomSubLevelItemCSS = custom_colors => css`
 
-    &:hover {
+    &:hover, &:focus {
         background-color: ${custom_colors.hover_color};
         color: white;
     }

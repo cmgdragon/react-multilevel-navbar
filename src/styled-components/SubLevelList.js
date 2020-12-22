@@ -47,12 +47,12 @@ export const getCustomSubLevelListCSS = custom_colors => css`
         border-top: 1px solid ${custom_colors.hover_color};
     }
 
-    [data-navbar-back]:hover::before {
+    [data-navbar-back]:hover::before, [data-navbar-back]:focus::before {
         border-left: 1px solid ${custom_colors.contrast_color};
         border-bottom: 1px solid ${custom_colors.contrast_color};
     }
 
-    [data-navbar-partof]:hover::after {
+    [data-navbar-partof]:hover::after, [data-navbar-partof]:focus::after {
         border-right: 1px solid ${custom_colors.contrast_color};
         border-top: 1px solid ${custom_colors.contrast_color};
     }

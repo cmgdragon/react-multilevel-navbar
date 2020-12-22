@@ -32,7 +32,7 @@ export const getCustomGroupListCSS = (custom_colors, custom_padding, mobile_brea
     margin-top: ${custom_padding};
 
     @media (max-width: ${mobile_breakpoint}) {
-        box-shadow: 0 0 0px 8px ${custom_colors.expand_color};
+        box-shadow: inset 1px 1px 0px 1px ${custom_colors.expand_color};
         border-left: 3px solid ${custom_colors.background_color};
         border-top: 3px solid ${custom_colors.background_color};
         background-color: ${custom_colors.background_color};

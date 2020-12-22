@@ -1,7 +1,8 @@
 import React from 'react';
 import SubLevelList, { getCustomSubLevelListCSS } from '../styled-components/SubLevelList';
 import SubLevelItem, { getCustomSubLevelItemCSS } from '../styled-components/SubLevelItem';
-import LevelLink from '../styled-components/LevelLink';
+import { followLink } from './react-multilevel-navbar';
+import ItemLink from '../styled-components/ItemLink';
 
 const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) => {
 
@@ -35,7 +36,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
     const assignGroupSizes = (currentTarget, listElement, isPrevious) => {
 
         const currentItems = [...currentTarget.parentElement.childNodes]
-            .filter(node => node.localName === 'li')
+            .filter(node => node.localName === 'li' || node.localName ==='a')
         const itemCurrentSizes = currentItems.map(item => item.offsetWidth);
 
         const items = [...listElement.childNodes].filter(node => node.nodeName !== '#text');
@@ -84,6 +85,27 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
         }, 1);
     }
 
+    const enableDisableTab = (disable, listElement) => {
+        [...listElement.childNodes]
+        .filter(node => node.localName === 'li' || node.localName ==='a')
+        .forEach(item => item.setAttribute('tabIndex', disable ? '-1' : '1'));
+    }
+
+    const changeGroupWithKeyboard = (event, isPrevious) => {
+
+        if (event.code === 'Tab') return;
+
+        const parentTarget = event.currentTarget.parentElement;
+        const listElement = selectNextOrPreviousGroup(isPrevious, parentTarget, event.currentTarget);
+
+        parentTarget.parentElement.parentElement.focus(); 
+        enableDisableTab(true, parentTarget);
+        enableDisableTab(false,listElement);
+
+        event.currentTarget.click();
+
+    }
+
     const changeGroup = ({ currentTarget }, isPrevious) => {
 
         const parentTarget = currentTarget.parentElement;
@@ -102,7 +124,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
     return (
         <SubLevelList css={getCustomSubLevelListCSS(custom_colors)}
             data-navbar-belongsto={isFirstSubLevel ? 'root' : belongsTo}
-            style={isFirstSubLevel ? { display: '' } : { display: 'none' }}>
+            style={isFirstSubLevel ? { display: '' } : { display: 'none' }} tabIndex={-1}>
             {
                 levelList.map(([levelName, value, isLevelNumber], index) => {
                     return (
@@ -112,7 +134,8 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
                                     key={index}
                                     data-navbar-back
                                     onClick={(event) => changeGroup(event, true)}
-                                    tabIndex="1">
+                                    onKeyDown={(event) => changeGroupWithKeyboard(event, true)}
+                                    tabIndex={isFirstSubLevel ? 1 : -1}>
                                     
                                 </SubLevelItem> : ''
                             }
@@ -121,12 +144,19 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
 
                                     <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
                                         onClick={(event) => changeGroup(event, false)}
-                                        data-navbar-partof={isLevelNumber}>
+                                        onKeyDown={(event) => changeGroupWithKeyboard(event, false)}
+                                        data-navbar-partof={isLevelNumber}
+                                        tabIndex={isFirstSubLevel ? 1 : -1}>
                                         {levelName}
                                     </SubLevelItem>
                                     :
-                                    <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}>
-                                        <LevelLink href={value}>{levelName}</LevelLink>
+                                    <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
+                                    tabIndex={isFirstSubLevel ? 1 : -1}
+                                    onClick={followLink}
+                                    onKeyDown={(event) => {if (event.code === 'Enter') return followLink(event)}}>
+                                        <ItemLink tabIndex={-1} href={value}>
+                                            {levelName}
+                                        </ItemLink>
                                     </SubLevelItem>
                             }
                         </React.Fragment>
