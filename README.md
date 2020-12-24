@@ -2,7 +2,10 @@
 
 A component that provides a nice-looking multilevel menu bar for your website. It is responsive and also navigable with the focus/tab key.
 
+[**Check a live example!**](https://react-multilevel-navbar.netlify.app/ "**Check a live example!**")
+
 ## Props
+These are the props you can pass to the component:
 
 |  Name | Type  | Default  | Required  |
 | ------------ | ------------ | ------------ | ------------ |
