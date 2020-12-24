@@ -1,5 +1,5 @@
 import React from 'react';
-import NavbarList from './Navbar-list';
+import NavbarList from './navbar-list';
 import GroupList from '../styled-components/GroupList';
 
 const NavbarGroup = ({ levelGroup, customcss }) => {

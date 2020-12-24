@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import NavbarGroup from './Navbar-group';
+import NavbarGroup from './navbar-group';
 import NavBar from '../styled-components/Navbar';
 import FirstLevelList from '../styled-components/FirstLevelList';
 import FirstLevelItem from '../styled-components/FirstLevelItem';
