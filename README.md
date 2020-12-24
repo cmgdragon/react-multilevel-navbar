@@ -42,7 +42,7 @@ The taxonomy model **must** follow this structure:
 There is no limit in nesting levels
 
 ### Custom colors
-The custom_colors prop must be an object of string, where you specify the property that you want to change. These are the default values:
+The custom_colors prop must be an object of strings, where you specify the property that you want to change. These are the default values:
 
     props.custom_colors = {
     	background_color: 'rgb(240, 238, 238)',
