@@ -1,4 +1,16 @@
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+
+const expand = keyframes`
+
+    from {
+        max-height: 0;
+    }
+    to {
+        max-height: 100vh;
+    }
+
+`;
 
 const FirstLevelItem = styled.li`
 
@@ -38,8 +50,15 @@ const FirstLevelItem = styled.li`
         transform: rotateZ(135deg);
     }
 
+    &:hover > [data-navbar-group], &:focus-within > [data-navbar-group] {
+        display: block !important;
+        animation-name: ${expand};
+        animation-duration: .5s;
+    }
+
     @media (max-width: ${({props}) => props.mobile_breakpoint}) {
         padding: .5rem 0;
+
     }
 
 `;

@@ -56,8 +56,3 @@ const NavbarGroup = ({ levelGroup, customcss }) => {
 }
 
 export default NavbarGroup;
-export const expandGroupList = groupList => groupList.classList.add('expand');
-export const collapseGroupList = groupList => {
-    if (groupList.style.display !== 'block')
-        groupList.classList.remove('expand');
-}

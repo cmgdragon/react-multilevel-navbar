@@ -4,7 +4,6 @@ import NavbarGroup from './Navbar-group';
 import NavBar from '../styled-components/Navbar';
 import FirstLevelList from '../styled-components/FirstLevelList';
 import FirstLevelItem from '../styled-components/FirstLevelItem';
-import { collapseGroupList, expandGroupList } from './Navbar-group';
 import ItemLink from '../styled-components/ItemLink';
 
 const ReactMultilevelNavbar = ({model, ...props}) => {
@@ -43,11 +42,10 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
     }, []);
 
     const blurOnMouseHover = event => {
+        if (window.innerWidth <= Number.parseInt(props.mobile_breakpoint.replace('px', ''))) return;
         [...event.currentTarget.parentElement.childNodes]
-        .filter(list => {
-            list.blur();
-            return !!list.getAttribute('data-navbar-hasgroup');
-        })
+        .filter(node => node.nodeName !== '#text')
+        .filter(list => !!list.getAttribute('data-navbar-hasgroup'))
         .forEach(list => {
             list.blur();
             [...list.lastElementChild.firstElementChild.childNodes]
@@ -55,12 +53,6 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
             .forEach(item => item.blur());
         });
     }
-
-    const expandOneGroup = ({currentTarget}) => {
-        [...document.querySelectorAll('[data-navbar-group]')]
-            .forEach(group => collapseGroupList(group));
-        expandGroupList(currentTarget.lastElementChild);
-    };
 
     return (
         <NavBar props={customcss} id="multilevel-navbar">
@@ -71,30 +63,26 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
                             <React.Fragment key={index}>
                                 {
                                     typeof value === 'object' ?
-                                        <FirstLevelItem 
-                                         onFocus={expandOneGroup}
-                                         onMouseOver={expandOneGroup}
-                                         onMouseLeave={({currentTarget}) => {
-                                            collapseGroupList(currentTarget.lastChild);
-                                         }}
-                                         props={customcss}
-                                         tabIndex={1}
-                                         data-navbar-hasgroup
-                                         onMouseEnter={blurOnMouseHover}>
-                                            <span>{levelName}</span>
-                                            <NavbarGroup 
-                                                levelGroup={value} 
-                                                customcss={customcss}
-                                            />
-                                        </FirstLevelItem>
-                                        :
-                                        <ItemLink 
-                                        firstlevel
-                                        tabIndex={1} 
-                                        href={value}
-                                        props={customcss}>
-                                            {levelName}
-                                        </ItemLink>
+                                    <FirstLevelItem 
+                                        props={customcss}
+                                        onMouseEnter={blurOnMouseHover}
+                                        tabIndex={1}
+                                        data-navbar-hasgroup
+                                        >
+                                        <span>{levelName}</span>
+                                        <NavbarGroup 
+                                            levelGroup={value} 
+                                            customcss={customcss}
+                                        />
+                                    </FirstLevelItem>
+                                    :
+                                    <ItemLink 
+                                    firstlevel
+                                    tabIndex={1} 
+                                    href={value}
+                                    props={customcss}>
+                                        {levelName}
+                                    </ItemLink>
                                 }
                             </React.Fragment>
                         )

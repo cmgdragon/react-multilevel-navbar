@@ -1,16 +1,4 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
-
-const expand = keyframes`
-
-    from {
-        max-height: 0;
-    }
-    to {
-        max-height: 100vh;
-    }
-
-`;
 
 const GroupList = styled.div`
 
@@ -25,12 +13,6 @@ const GroupList = styled.div`
     background-color: ${({props}) => props.custom_colors.background_color};
     box-shadow: -20px 4px 0px 4px ${({props}) => props.custom_colors.expand_color};
     margin-top: ${({props}) => props.custom_padding};
-
-    &.expand {
-        display: block !important;
-        animation-name: ${expand};
-        animation-duration: .5s;
-    }
 
     @media (max-width: ${({props}) => props.mobile_breakpoint}) {
         position: relative;
