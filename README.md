@@ -9,12 +9,12 @@ These are the props you can pass to the component:
 
 |  Name | Type  | Default  | Required  |
 | ------------ | ------------ | ------------ | ------------ |
-| model  | object  | [model](#Model)  | yes |
+| model  | object  | [model](#model)  | yes |
 | custom_width  | string  | 100%  | no|
 |  custom_padding | string  | 1.5rem  | no  |
 |  custom_fontFamily | string  | Raleway, sans-serif  | no  |
 | mobile_breakpoint  |  string | 645px  | no  |
-| custom_colors  | object  | [Custom Colors](#Custom colors)  |  no |
+| custom_colors  | object  | [Custom Colors](#custom-colors)  |  no |
 
 
 ### Model
