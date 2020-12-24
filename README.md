@@ -9,12 +9,12 @@ These are the props you can pass to the component:
 
 |  Name | Type  | Default  | Required  |
 | ------------ | ------------ | ------------ | ------------ |
-| model  | object  |   | yes |
+| model  | object  | [model](#Model)  | yes |
 | custom_width  | string  | 100%  | no|
 |  custom_padding | string  | 1.5rem  | no  |
 |  custom_fontFamily | string  | Raleway, sans-serif  | no  |
 | mobile_breakpoint  |  string | 645px  | no  |
-| custom_colors  | object  |   |  no |
+| custom_colors  | object  | [Custom Colors](#Custom colors)  |  no |
 
 
 ### Model
@@ -41,7 +41,7 @@ The taxonomy model **must** follow this structure:
 
 There is no limit in nesting levels
 
-###Custom colors
+### Custom colors
 The custom_colors prop must be an object of string, where you specify the property that you want to change. These are the default values:
 
     props.custom_colors = {
