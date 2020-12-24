@@ -1,12 +1,23 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import NavbarGroup from './Navbar-group';
-import NavBar, { getCustomNavbarCSS } from '../styled-components/Navbar';
-import FirstLevelList, { getCustomFirstLevelListCSS } from '../styled-components/FirstLevelList';
-import FirstLevelItem, { getCustomFirstLevelItemCSS } from '../styled-components/FirstLevelItem';
+import NavBar from '../styled-components/Navbar';
+import FirstLevelList from '../styled-components/FirstLevelList';
+import FirstLevelItem from '../styled-components/FirstLevelItem';
+import { collapseGroupList, expandGroupList } from './Navbar-group';
 import ItemLink from '../styled-components/ItemLink';
 
-const ReactMultilevelNavbar = ({model, custom_width, custom_padding, 
-    custom_colors, custom_fontFamily, mobile_breakpoint}) => {
+const ReactMultilevelNavbar = ({model, ...props}) => {
+
+    props.custom_colors = {
+        background_color: 'rgb(240, 238, 238)',
+        expand_color: 'rgb(255, 190, 190)',
+        hover_color: 'black',
+        contrast_color: 'white',
+        ...props.custom_colors
+    }
+
+    const customcss = props;
 
     useEffect(() => {
   
@@ -15,7 +26,7 @@ const ReactMultilevelNavbar = ({model, custom_width, custom_padding,
         allGroups.forEach(group => {
 
             const allItemsWidthFirstLevel = [...group.firstElementChild.childNodes]
-                .filter(node => node.localName === 'li')
+                .filter(node => node.nodeName !== '#text')
                 .map(item => item.offsetWidth);
 
             const largestItemFirstLevel = allItemsWidthFirstLevel
@@ -31,35 +42,59 @@ const ReactMultilevelNavbar = ({model, custom_width, custom_padding,
 
     }, []);
 
+    const blurOnMouseHover = event => {
+        [...event.currentTarget.parentElement.childNodes]
+        .filter(list => {
+            list.blur();
+            return !!list.getAttribute('data-navbar-hasgroup');
+        })
+        .forEach(list => {
+            list.blur();
+            [...list.lastElementChild.firstElementChild.childNodes]
+            .filter(node => node.nodeName !== '#text')
+            .forEach(item => item.blur());
+        });
+    }
+
+    const expandOneGroup = ({currentTarget}) => {
+        [...document.querySelectorAll('[data-navbar-group]')]
+            .forEach(group => collapseGroupList(group));
+        expandGroupList(currentTarget.lastElementChild);
+    };
+
     return (
-        <NavBar id="multilevel-navbar" css={getCustomNavbarCSS(custom_fontFamily)}>
-            <FirstLevelList css={getCustomFirstLevelListCSS(custom_width, custom_colors, mobile_breakpoint)}>
+        <NavBar props={customcss} id="multilevel-navbar">
+            <FirstLevelList props={customcss}>
                 {
-                    Object.entries(model).map((level, index) => {
+                    Object.entries(model).map(([levelName, value], index) => {
                         return (
                             <React.Fragment key={index}>
                                 {
-                                    typeof level[1] === 'object' ?
-                                        <FirstLevelItem
-                                         css={getCustomFirstLevelItemCSS(custom_padding, custom_colors)}
+                                    typeof value === 'object' ?
+                                        <FirstLevelItem 
+                                         onFocus={expandOneGroup}
+                                         onMouseOver={expandOneGroup}
+                                         onMouseLeave={({currentTarget}) => {
+                                            collapseGroupList(currentTarget.lastChild);
+                                         }}
+                                         props={customcss}
                                          tabIndex={1}
-                                         data-navbar-hasgroup>
-                                            <span>{level[0]}</span>
+                                         data-navbar-hasgroup
+                                         onMouseEnter={blurOnMouseHover}>
+                                            <span>{levelName}</span>
                                             <NavbarGroup 
-                                                levelGroup={level[1]} 
-                                                custom_colors={custom_colors} 
-                                                custom_padding={custom_padding}
-                                                mobile_breakpoint={mobile_breakpoint}
+                                                levelGroup={value} 
+                                                customcss={customcss}
                                             />
                                         </FirstLevelItem>
                                         :
-                                        <FirstLevelItem 
-                                         css={getCustomFirstLevelItemCSS(custom_padding, custom_colors)}
-                                         tabIndex={1}
-                                         onClick={followLink}
-                                         onKeyDown={(event) => {if (event.code === 'Enter') return followLink(event)}}>
-                                            <ItemLink tabIndex="-1" href={level[1]}>{level[0]}</ItemLink>
-                                        </FirstLevelItem>
+                                        <ItemLink 
+                                        firstlevel
+                                        tabIndex={1} 
+                                        href={value}
+                                        props={customcss}>
+                                            {levelName}
+                                        </ItemLink>
                                 }
                             </React.Fragment>
                         )
@@ -76,13 +111,15 @@ ReactMultilevelNavbar.defaultProps = {
     custom_padding: '1.5rem',
     custom_fontFamily: 'Raleway, sans-serif',
     mobile_breakpoint: '645px',
-    custom_colors: {
-        background_color: 'rgb(240, 238, 238)',
-        expand_color: 'rgb(255, 190, 190)',
-        hover_color: 'black',
-        constrast_color: 'white'
-    }
+}
+
+ReactMultilevelNavbar.propTypes = {
+    model: PropTypes.object,
+    custom_width: PropTypes.string,
+    custom_padding: PropTypes.string,
+    custom_fontFamily: PropTypes.string,
+    mobile_breakpoint: PropTypes.string,
+    custom_colors: PropTypes.objectOf(PropTypes.string)
 }
 
 export default ReactMultilevelNavbar;
-export const followLink = ({currentTarget}) => currentTarget.firstChild.click();

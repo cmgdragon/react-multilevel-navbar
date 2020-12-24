@@ -1,10 +1,9 @@
 import React from 'react';
-import SubLevelList, { getCustomSubLevelListCSS } from '../styled-components/SubLevelList';
-import SubLevelItem, { getCustomSubLevelItemCSS } from '../styled-components/SubLevelItem';
-import { followLink } from './react-multilevel-navbar';
+import SubLevelList from '../styled-components/SubLevelList';
+import SubLevelItem from '../styled-components/SubLevelItem';
 import ItemLink from '../styled-components/ItemLink';
 
-const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) => {
+const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
 
     const selectNextOrPreviousGroup = (isPrevious, parentTarget, currentTarget) => {
 
@@ -36,7 +35,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
     const assignGroupSizes = (currentTarget, listElement, isPrevious) => {
 
         const currentItems = [...currentTarget.parentElement.childNodes]
-            .filter(node => node.localName === 'li' || node.localName ==='a')
+            .filter(node => node.nodeName !== '#text')
         const itemCurrentSizes = currentItems.map(item => item.offsetWidth);
 
         const items = [...listElement.childNodes].filter(node => node.nodeName !== '#text');
@@ -51,11 +50,11 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
         listElement.parentElement.style.width = `${levelWidth}px`;
         listElement.parentElement.style.height = `${listElement.offsetHeight}px`;
 
-        moveGroupScroll(listElement, isPrevious, currentLevelWidth);
+        moveGroupScroll(currentTarget, listElement, isPrevious, currentLevelWidth);
 
     }
 
-    const moveGroupScroll = (listElement, isPrevious, currentLevelWidth) => {
+    const moveGroupScroll = (currentTarget, listElement, isPrevious, currentLevelWidth) => {
         let newScrollLeft = listElement.parentElement.scrollLeft;
 
         if (isPrevious) {
@@ -70,6 +69,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
                 listElement.parentElement.scrollLeft -= window.devicePixelRatio;
                 if (listElement.parentElement.scrollLeft <= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
+                    currentTarget.blur();
                     clearInterval(scroll);
                     enableDisableButtons(false, listElement);
                 }
@@ -77,6 +77,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
                 listElement.parentElement.scrollLeft += window.devicePixelRatio;
                 if (listElement.parentElement.scrollLeft >= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
+                    currentTarget.blur();
                     clearInterval(scroll);
                     enableDisableButtons(false, listElement);
                 }
@@ -87,7 +88,7 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
 
     const enableDisableTab = (disable, listElement) => {
         [...listElement.childNodes]
-        .filter(node => node.localName === 'li' || node.localName ==='a')
+        .filter(node => node.nodeName !== '#text')
         .forEach(item => item.setAttribute('tabIndex', disable ? '-1' : '1'));
     }
 
@@ -122,15 +123,17 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
     }
 
     return (
-        <SubLevelList css={getCustomSubLevelListCSS(custom_colors)}
+        <SubLevelList 
+            props={customcss}
             data-navbar-belongsto={isFirstSubLevel ? 'root' : belongsTo}
             style={isFirstSubLevel ? { display: '' } : { display: 'none' }} tabIndex={-1}>
             {
-                levelList.map(([levelName, value, isLevelNumber], index) => {
+                levelList.map(([levelName, url, isLevelNumber], index) => {
                     return (
                         <React.Fragment key={index}>
                             { !isFirstSubLevel && index === 0 ?
-                                <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
+                                <SubLevelItem 
+                                    props={customcss}
                                     key={index}
                                     data-navbar-back
                                     onClick={(event) => changeGroup(event, true)}
@@ -140,9 +143,10 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
                                 </SubLevelItem> : ''
                             }
                             {
-                                value === 'next' ?
+                                url === 'next' ?
 
-                                    <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
+                                    <SubLevelItem 
+                                        props={customcss}
                                         onClick={(event) => changeGroup(event, false)}
                                         onKeyDown={(event) => changeGroupWithKeyboard(event, false)}
                                         data-navbar-partof={isLevelNumber}
@@ -150,14 +154,13 @@ const NavbarList = ({ levelList, isFirstSubLevel, belongsTo, custom_colors }) =>
                                         {levelName}
                                     </SubLevelItem>
                                     :
-                                    <SubLevelItem css={getCustomSubLevelItemCSS(custom_colors)}
-                                    tabIndex={isFirstSubLevel ? 1 : -1}
-                                    onClick={followLink}
-                                    onKeyDown={(event) => {if (event.code === 'Enter') return followLink(event)}}>
-                                        <ItemLink tabIndex={-1} href={value}>
-                                            {levelName}
-                                        </ItemLink>
-                                    </SubLevelItem>
+                                    <ItemLink 
+                                    props={customcss}
+                                    tabIndex={1} 
+                                    href={url}
+                                    props={customcss}>
+                                        {levelName}
+                                    </ItemLink>
                             }
                         </React.Fragment>
                     )

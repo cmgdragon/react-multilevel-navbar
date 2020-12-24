@@ -1,8 +1,8 @@
 import React from 'react';
 import NavbarList from './Navbar-list';
-import GroupList, { getCustomGroupListCSS } from '../styled-components/GroupList';
+import GroupList from '../styled-components/GroupList';
 
-const NavbarGroup = ({ levelGroup, custom_colors, custom_padding, mobile_breakpoint }) => {
+const NavbarGroup = ({ levelGroup, customcss }) => {
 
     const extractSubLevels = levelGroup => {
 
@@ -37,16 +37,16 @@ const NavbarGroup = ({ levelGroup, custom_colors, custom_padding, mobile_breakpo
     }
 
     return (
-        <GroupList css={getCustomGroupListCSS(custom_colors, custom_padding, mobile_breakpoint)} data-navbar-group>
+        <GroupList props={customcss} data-navbar-group>
             {
                 extractSubLevels(levelGroup).map(([groupList, belongsTo], index) => {
                     return (
                         <NavbarList 
+                            customcss={customcss}
                             key={index} 
                             levelList={groupList} 
                             belongsTo={belongsTo} 
                             isFirstSubLevel={index === 1 ? true : false} 
-                            custom_colors={custom_colors}
                         />
                     )
                 })
@@ -56,3 +56,8 @@ const NavbarGroup = ({ levelGroup, custom_colors, custom_padding, mobile_breakpo
 }
 
 export default NavbarGroup;
+export const expandGroupList = groupList => groupList.classList.add('expand');
+export const collapseGroupList = groupList => {
+    if (groupList.style.display !== 'block')
+        groupList.classList.remove('expand');
+}

@@ -6,11 +6,11 @@ const model = {
     },
 
     ['Level 2'] : {
-        ['1QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: {
+        ['1. QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: {
             ['1.1QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPAT']: '#'
         },
-        ['2QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPATSDAD'] : {
-            ['2.2 GHYUGUYHUJI'] : '#'
+        ['2. QUISQUE VEHICULA MASSA VEL TELLUS VOLUTPATSDAD'] : {
+            ['2.2 GHYUGUYHUJI'] : 'https://github.com/cmgdragon/react-multilevel-navbar/'
         }
     },
 

@@ -1,5 +1,16 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
+import { keyframes } from '@emotion/react';
+
+const expand = keyframes`
+
+    from {
+        max-height: 0;
+    }
+    to {
+        max-height: 100vh;
+    }
+
+`;
 
 const GroupList = styled.div`
 
@@ -11,31 +22,25 @@ const GroupList = styled.div`
     transition: all .5s;
     position: absolute;
     visibility: hidden;
+    background-color: ${({props}) => props.custom_colors.background_color};
+    box-shadow: -20px 4px 0px 4px ${({props}) => props.custom_colors.expand_color};
+    margin-top: ${({props}) => props.custom_padding};
 
-    &:hover {
-        display: block;
+    &.expand {
+        display: block !important;
+        animation-name: ${expand};
+        animation-duration: .5s;
     }
 
-    @media (max-width: 645px) {
+    @media (max-width: ${({props}) => props.mobile_breakpoint}) {
         position: relative;
         margin: 1rem auto 0 auto;
+        box-shadow: inset 1px 1px 0px 1px ${({props}) => props.custom_colors.expand_color};
+        border-left: 3px solid ${({props}) => props.custom_colors.background_color};
+        border-top: 3px solid ${({props}) => props.custom_colors.background_color};
+        background-color: ${({props}) => props.custom_colors.background_color};
     }
 
 `;
 
 export default GroupList;
-
-export const getCustomGroupListCSS = (custom_colors, custom_padding, mobile_breakpoint) => css`
-
-    background-color: ${custom_colors.background_color};
-    box-shadow: -20px 4px 0px 4px ${custom_colors.expand_color};
-    margin-top: ${custom_padding};
-
-    @media (max-width: ${mobile_breakpoint}) {
-        box-shadow: inset 1px 1px 0px 1px ${custom_colors.expand_color};
-        border-left: 3px solid ${custom_colors.background_color};
-        border-top: 3px solid ${custom_colors.background_color};
-        background-color: ${custom_colors.background_color};
-    }
-
-`;
