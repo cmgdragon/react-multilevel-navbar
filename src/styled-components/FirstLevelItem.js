@@ -56,7 +56,7 @@ const FirstLevelItem = styled.li`
         animation-duration: .5s;
     }
 
-    @media (max-width: ${({props}) => props.mobile_breakpoint}) {
+    @media (max-width: ${({props}) => props.mobile_breakpoint}px) {
         padding: .5rem 0;
 
     }

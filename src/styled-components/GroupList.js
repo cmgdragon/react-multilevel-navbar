@@ -14,7 +14,7 @@ const GroupList = styled.div`
     box-shadow: -20px 4px 0px 4px ${({props}) => props.custom_colors.expand_color};
     margin-top: ${({props}) => props.custom_padding};
 
-    @media (max-width: ${({props}) => props.mobile_breakpoint}) {
+    @media (max-width: ${({props}) => props.mobile_breakpoint}px) {
         position: relative;
         margin: 1rem auto 0 auto;
         box-shadow: inset 1px 1px 0px 1px ${({props}) => props.custom_colors.expand_color};

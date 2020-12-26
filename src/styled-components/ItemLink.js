@@ -28,7 +28,7 @@ const ItemLink = styled.a`
                     : props.custom_colors.contrast_color};
     }
 
-    @media (max-width: ${({props}) => props.mobile_breakpoint}) {
+    @media (max-width: ${({props}) => props.mobile_breakpoint}px) {
         padding: .5rem 16px;
     }
 

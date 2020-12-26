@@ -42,7 +42,8 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
     }, []);
 
     const blurOnMouseHover = event => {
-        if (window.innerWidth <= Number.parseInt(props.mobile_breakpoint.replace('px', ''))) return;
+        //document.activeElement.blur();
+       // if (window.innerWidth <= Number.parseInt(props.mobile_breakpoint.replace('px', ''))) return;
         [...event.currentTarget.parentElement.childNodes]
         .filter(node => node.nodeName !== '#text')
         .filter(list => !!list.getAttribute('data-navbar-hasgroup'))
@@ -78,7 +79,8 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
                                     :
                                     <ItemLink 
                                     firstlevel
-                                    tabIndex={1} 
+                                    tabIndex={1}
+                                    onTouchStart={({currentTarget}) => currentTarget.click()}
                                     href={value}
                                     props={customcss}>
                                         {levelName}
@@ -98,7 +100,7 @@ ReactMultilevelNavbar.defaultProps = {
     custom_width: '100%',
     custom_padding: '1.5rem',
     custom_fontFamily: 'Raleway, sans-serif',
-    mobile_breakpoint: '645px',
+    mobile_breakpoint: 645,
 }
 
 ReactMultilevelNavbar.propTypes = {
@@ -106,7 +108,7 @@ ReactMultilevelNavbar.propTypes = {
     custom_width: PropTypes.string,
     custom_padding: PropTypes.string,
     custom_fontFamily: PropTypes.string,
-    mobile_breakpoint: PropTypes.string,
+    mobile_breakpoint: PropTypes.number,
     custom_colors: PropTypes.objectOf(PropTypes.string)
 }
 

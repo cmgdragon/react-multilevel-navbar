@@ -69,6 +69,8 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                 listElement.parentElement.scrollLeft -= window.devicePixelRatio;
                 if (listElement.parentElement.scrollLeft <= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
+                    if (window.innerWidth >= customcss.mobile_breakpoint)
+                        currentTarget.blur();
                     clearInterval(scroll);
                     enableDisableButtons(false, listElement);
                 }
@@ -76,6 +78,8 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                 listElement.parentElement.scrollLeft += window.devicePixelRatio;
                 if (listElement.parentElement.scrollLeft >= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
+                    if (window.innerWidth >= customcss.mobile_breakpoint)
+                        currentTarget.blur();
                     clearInterval(scroll);
                     enableDisableButtons(false, listElement);
                 }
