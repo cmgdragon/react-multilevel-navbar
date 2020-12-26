@@ -69,7 +69,6 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                 listElement.parentElement.scrollLeft -= window.devicePixelRatio;
                 if (listElement.parentElement.scrollLeft <= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
-                    currentTarget.blur();
                     clearInterval(scroll);
                     enableDisableButtons(false, listElement);
                 }
@@ -77,7 +76,6 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                 listElement.parentElement.scrollLeft += window.devicePixelRatio;
                 if (listElement.parentElement.scrollLeft >= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
-                    currentTarget.blur();
                     clearInterval(scroll);
                     enableDisableButtons(false, listElement);
                 }
@@ -92,17 +90,13 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
         .forEach(item => item.setAttribute('tabIndex', disable ? '-1' : '1'));
     }
 
-    const changeGroupWithKeyboard = (event, isPrevious) => {
+    const changeGroupWithKeyboard = event => {
 
         if (event.code === 'Tab') return;
 
         const parentTarget = event.currentTarget.parentElement;
-        const listElement = selectNextOrPreviousGroup(isPrevious, parentTarget, event.currentTarget);
 
         parentTarget.parentElement.parentElement.focus(); 
-        enableDisableTab(true, parentTarget);
-        enableDisableTab(false,listElement);
-
         event.currentTarget.click();
 
     }
@@ -115,6 +109,8 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
 
         const listElement = selectNextOrPreviousGroup(isPrevious, parentTarget, currentTarget);
         
+        enableDisableTab(true, parentTarget);
+        enableDisableTab(false,listElement);
         enableDisableButtons(true, listElement);
         listElement.parentElement.style.display = 'block';
 
@@ -137,7 +133,7 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                                     key={index}
                                     data-navbar-back
                                     onClick={(event) => changeGroup(event, true)}
-                                    onKeyDown={(event) => changeGroupWithKeyboard(event, true)}
+                                    onKeyDown={changeGroupWithKeyboard}
                                     tabIndex={isFirstSubLevel ? 1 : -1}>
                                     
                                 </SubLevelItem> : ''
@@ -148,7 +144,7 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                                     <SubLevelItem 
                                         props={customcss}
                                         onClick={(event) => changeGroup(event, false)}
-                                        onKeyDown={(event) => changeGroupWithKeyboard(event, false)}
+                                        onKeyDown={changeGroupWithKeyboard}
                                         data-navbar-partof={isLevelNumber}
                                         tabIndex={isFirstSubLevel ? 1 : -1}>
                                         {levelName}
@@ -156,7 +152,7 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                                     :
                                     <ItemLink 
                                     props={customcss}
-                                    tabIndex={1} 
+                                    tabIndex={isFirstSubLevel ? 1 : -1} 
                                     href={url}
                                     props={customcss}>
                                         {levelName}
