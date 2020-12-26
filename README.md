@@ -4,6 +4,14 @@ A component that provides a nice-looking multilevel menu bar for your website. I
 
 [**Check a live example!**](https://react-multilevel-navbar.netlify.app/ "**Check a live example!**")
 
+
+## Installation
+
+`npm i react-multilevel-navbar`
+
+	import ReactMultiLevelNavbar from 'react-multilevel-navbar';
+
+
 ## Props
 These are the props you can pass to the component:
 
