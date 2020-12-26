@@ -42,8 +42,6 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
     }, []);
 
     const blurOnMouseHover = event => {
-        //document.activeElement.blur();
-       // if (window.innerWidth <= Number.parseInt(props.mobile_breakpoint.replace('px', ''))) return;
         [...event.currentTarget.parentElement.childNodes]
         .filter(node => node.nodeName !== '#text')
         .filter(list => !!list.getAttribute('data-navbar-hasgroup'))
