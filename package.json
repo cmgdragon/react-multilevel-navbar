@@ -1,6 +1,6 @@
 {
   "name": "react-multilevel-navbar",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A multilevel navbar for your react project.",
   "main": "dist/index.js",
   "scripts": {
@@ -44,7 +44,13 @@
     "type": "git",
     "url": "git+https://github.com/cmgdragon/react-multilevel-navbar.git"
   },
-  "keywords": [],
+  "keywords": [
+    "multilevel menu",
+    "nabvar",
+    "react multilevel navbar",
+    "navigation",
+    "multilevel navbar"
+  ],
   "bugs": {
     "url": "https://github.com/cmgdragon/react-multilevel-navbar/issues"
   },
