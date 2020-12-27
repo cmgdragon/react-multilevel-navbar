@@ -1,6 +1,6 @@
 {
   "name": "react-multilevel-navbar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A multilevel navbar for your react project.",
   "main": "dist/index.js",
   "scripts": {
