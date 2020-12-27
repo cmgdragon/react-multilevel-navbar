@@ -112,7 +112,7 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
         if (parentTarget.getAttribute('data-navbar-disabled') == 'true') return;
 
         const listElement = selectNextOrPreviousGroup(isPrevious, parentTarget, currentTarget);
-        
+        console.log(listElement.offsetHeight)
         enableDisableTab(true, parentTarget);
         enableDisableTab(false,listElement);
         enableDisableButtons(true, listElement);
@@ -155,10 +155,11 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                                     </SubLevelItem>
                                     :
                                     <ItemLink 
-                                    props={customcss}
-                                    tabIndex={isFirstSubLevel ? 1 : -1} 
-                                    href={url}
-                                    props={customcss}>
+                                        props={customcss}
+                                        tabIndex={isFirstSubLevel ? 1 : -1}
+                                        onClick={({currentTarget}) => currentTarget.blur()}
+                                        href={url}
+                                        props={customcss}>
                                         {levelName}
                                     </ItemLink>
                             }
