@@ -32,26 +32,17 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
                 .reduce((prev, curr) => prev < curr ? curr : prev);
 
             const fistLevelWidth = largestItemFirstLevel >= 200 ? 200 : largestItemFirstLevel;
-
             group.style.width = `${fistLevelWidth}px`;
-            group.style.visibility = 'visible';
-            group.style.display = 'none';
+            
+            setTimeout(() => {
+                group.style.height = `${group.firstElementChild.offsetHeight}px`;
+                group.style.visibility = 'visible';
+                group.style.display = 'none';
+            }, 500);
 
         });
 
     }, []);
-
-    const blurOnMouseHover = event => {
-        [...event.currentTarget.parentElement.childNodes]
-        .filter(node => node.nodeName !== '#text')
-        .filter(list => !!list.getAttribute('data-navbar-hasgroup'))
-        .forEach(list => {
-            list.blur();
-            [...list.lastElementChild.firstElementChild.childNodes]
-            .filter(node => node.nodeName !== '#text')
-            .forEach(item => item.blur());
-        });
-    }
 
     return (
         <NavBar props={customcss} id="multilevel-navbar">
@@ -64,7 +55,6 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
                                     typeof value === 'object' ?
                                     <FirstLevelItem 
                                         props={customcss}
-                                        onMouseEnter={blurOnMouseHover}
                                         tabIndex={1}
                                         data-navbar-hasgroup
                                         >
@@ -76,12 +66,12 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
                                     </FirstLevelItem>
                                     :
                                     <ItemLink 
-                                    firstlevel
-                                    tabIndex={1}
-                                    onTouchStart={({currentTarget}) => currentTarget.click()}
-                                    href={value}
-                                    props={customcss}>
-                                        {levelName}
+                                        firstlevel
+                                        tabIndex={1}
+                                        onTouchStart={({currentTarget}) => currentTarget.click()}
+                                        href={value}
+                                        props={customcss}>
+                                            {levelName}
                                     </ItemLink>
                                 }
                             </React.Fragment>
