@@ -19,26 +19,27 @@ const ReactMultilevelNavbar = ({model, ...props}) => {
     const customcss = props;
 
     useEffect(() => {
-  
+
         const allGroups = document.querySelectorAll('[data-navbar-group]');
 
         allGroups.forEach(group => {
 
-            const allItemsWidthFirstLevel = [...group.firstElementChild.childNodes]
+            const allItemsHeightFirstSubLevel = [...group.firstElementChild.childNodes]
                 .filter(node => node.nodeName !== '#text')
-                .map(item => item.offsetWidth);
+                .map(item => item.offsetHeight)
+                .reduce((prev, curr) => prev + curr);  
+          
 
-            const largestItemFirstLevel = allItemsWidthFirstLevel
-                .reduce((prev, curr) => prev < curr ? curr : prev);
+            const allListElements = [...group.firstElementChild.childNodes]
+                .filter(node => node.localName === 'li');
 
-            const fistLevelWidth = largestItemFirstLevel >= 200 ? 200 : largestItemFirstLevel;
-            group.style.width = `${fistLevelWidth}px`;
-            
-            setTimeout(() => {
-                group.style.height = `${group.firstElementChild.offsetHeight}px`;
-                group.style.visibility = 'visible';
-                group.style.display = 'none';
-            }, 500);
+            const hasWrappedText = allListElements.some(list => 
+                list.firstElementChild.offsetWidth >= 137);
+
+            group.style.height = `${hasWrappedText ? allItemsHeightFirstSubLevel - 16
+                                     : allItemsHeightFirstSubLevel}px`;
+            group.style.visibility = 'visible';
+            group.style.display = 'none';
 
         });
 

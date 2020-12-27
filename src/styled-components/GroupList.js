@@ -6,7 +6,7 @@ const GroupList = styled.div`
     white-space: nowrap;
     overflow: hidden;
     opacity: 1;
-    width: 250px;
+    width: 200px;
     transition: all .5s;
     position: absolute;
     visibility: hidden;

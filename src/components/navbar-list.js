@@ -34,39 +34,25 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
 
     const assignGroupSizes = (currentTarget, listElement, isPrevious) => {
 
-        const currentItems = [...currentTarget.parentElement.childNodes]
-            .filter(node => node.nodeName !== '#text')
-        const itemCurrentSizes = currentItems.map(item => item.offsetWidth);
-
-        const items = [...listElement.childNodes].filter(node => node.nodeName !== '#text');
-        const itemSizes = items.map(item => item.offsetWidth);
-
-        const largestCurrentItem = itemCurrentSizes.reduce((prev, curr) => prev < curr ? curr : prev);
-        const largestItem = itemSizes.reduce((prev, curr) => prev < curr ? curr : prev);
-
-        const levelWidth = largestItem >= 200 ? 200 : largestItem;
-        const currentLevelWidth = largestCurrentItem >= 200 ? 200 : largestCurrentItem;
-
-        listElement.parentElement.style.width = `${levelWidth}px`;
         listElement.parentElement.style.height = `${listElement.offsetHeight}px`;
 
-        moveGroupScroll(currentTarget, listElement, isPrevious, currentLevelWidth);
+        moveGroupScroll(currentTarget, listElement, isPrevious);
 
     }
 
-    const moveGroupScroll = (currentTarget, listElement, isPrevious, currentLevelWidth) => {
+    const moveGroupScroll = (currentTarget, listElement, isPrevious) => {
         let newScrollLeft = listElement.parentElement.scrollLeft;
 
         if (isPrevious) {
-            newScrollLeft -= currentLevelWidth + (16 * 2) - 16;
+            newScrollLeft -= 200 + (16 * 2) - 16;
         } else {
-            newScrollLeft += currentLevelWidth + (16 * 2) - 16;
+            newScrollLeft += 200 + (16 * 2) - 16;
         }
 
         const scroll = setInterval(function () {
 
             if (isPrevious) {
-                listElement.parentElement.scrollLeft -= window.devicePixelRatio;
+                listElement.parentElement.scrollLeft -= window.devicePixelRatio *2;
                 if (listElement.parentElement.scrollLeft <= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
                     if (window.innerWidth >= customcss.mobile_breakpoint)
@@ -75,7 +61,7 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                     enableDisableButtons(false, listElement);
                 }
             } else {
-                listElement.parentElement.scrollLeft += window.devicePixelRatio;
+                listElement.parentElement.scrollLeft += window.devicePixelRatio*2;
                 if (listElement.parentElement.scrollLeft >= newScrollLeft) {
                     listElement.parentElement.style.display = 'none';
                     if (window.innerWidth >= customcss.mobile_breakpoint)
@@ -151,7 +137,7 @@ const NavbarList = ({ levelList, customcss, isFirstSubLevel, belongsTo }) => {
                                         onKeyDown={changeGroupWithKeyboard}
                                         data-navbar-partof={isLevelNumber}
                                         tabIndex={isFirstSubLevel ? 1 : -1}>
-                                        {levelName}
+                                        <span>{levelName}</span>
                                     </SubLevelItem>
                                     :
                                     <ItemLink 
